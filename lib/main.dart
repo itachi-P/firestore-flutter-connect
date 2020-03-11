@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'change_habits/start_change_habits.dart';
+import 'new_app.dart';
 import 'user_login/login_page.dart';
 import 'user_login/user_logged_in.dart';
 
@@ -15,7 +15,7 @@ void main() {
   runApp(
     MaterialApp(
         title: 'Various login tests',
-        home: _loggedIn ? ChangeHabits() : LoginPage() // (仮)
+        home: _loggedIn ? NewApp() : LoginPage() // (仮)
         ),
   );
 }
