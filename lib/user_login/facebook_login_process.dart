@@ -1,24 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-// TODO flutter_facebook_loginが使える状態になっていない(ソースコードではなく設定側の問題)
 
-class BuildFacebookLoginButton extends StatefulWidget {
-  BuildFacebookLoginButton({
-    Key key,
-    this.title,
-  }) : super(
-          key: key,
-        );
+class FacebookLoginProcess extends StatefulWidget {
+  FacebookLoginProcess({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _BuildFacebookLoginButtonState createState() =>
-      _BuildFacebookLoginButtonState();
+  _FacebookLoginProcessState createState() => _FacebookLoginProcessState();
 }
 
-class _BuildFacebookLoginButtonState extends State {
+class _FacebookLoginProcessState extends State {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FacebookLogin facebookSignIn = FacebookLogin();
 
@@ -33,14 +26,15 @@ class _BuildFacebookLoginButtonState extends State {
     );
 
     // Firebaseのユーザー情報を取得
-    final FirebaseUser user =
+    final FirebaseUser _firebaseUser =
         (await _auth.signInWithCredential(credential)).user;
 
-    assert(!user.isAnonymous);
-    assert(await user.getIdToken() != null);
+    assert(!_firebaseUser.isAnonymous);
+    assert(await _firebaseUser.getIdToken() != null);
 
     final FirebaseUser currentUser = await _auth.currentUser();
-    assert(user.uid == currentUser.uid);
+    assert(_firebaseUser.uid == currentUser.uid);
+    print("signed in " + _firebaseUser.displayName);
 
     login();
   }

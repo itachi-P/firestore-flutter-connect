@@ -2,16 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class GoogleLoginVer2 extends StatefulWidget {
-  GoogleLoginVer2({Key key, this.title}) : super(key: key);
+class GoogleLoginProcess extends StatefulWidget {
+  GoogleLoginProcess({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _GoogleLoginVer2State createState() => _GoogleLoginVer2State();
+  _GoogleLoginProcessState createState() => _GoogleLoginProcessState();
 }
 
-class _GoogleLoginVer2State extends State {
+class _GoogleLoginProcessState extends State {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
@@ -42,14 +42,15 @@ class _GoogleLoginVer2State extends State {
     );
 
     //userのid取得
-    final FirebaseUser user =
+    final FirebaseUser _firebaseUser =
         (await _auth.signInWithCredential(credential)).user;
 
-    assert(!user.isAnonymous);
-    assert(await user.getIdToken() != null);
+    assert(!_firebaseUser.isAnonymous);
+    assert(await _firebaseUser.getIdToken() != null);
 
     final FirebaseUser currentUser = await _auth.currentUser();
-    assert(user.uid == currentUser.uid);
+    assert(_firebaseUser.uid == currentUser.uid);
+    print("signed in " + _firebaseUser.displayName);
 
     login();
   }

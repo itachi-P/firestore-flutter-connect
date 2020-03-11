@@ -1,49 +1,21 @@
 import 'package:flutter/material.dart';
 
-import 'build_facebook_login_button.dart';
-import 'build_google_login_button.dart';
-import 'build_mail_login_form.dart';
-import 'google_login.dart';
+import 'change_habits/start_change_habits.dart';
+import 'user_login/login_page.dart';
+import 'user_login/user_logged_in.dart';
+
+// TODO 最終的に、ログイン状態であればログイン画面を飛ばしてアプリ本体画面に進むように変更
+// ログイン状態かどうかを判定し、遷移先画面を決める
+//bool _loggedIn = false;
+UserLoggedIn _userLoggedIn = UserLoggedIn();
 
 void main() {
+  final _loggedIn = _userLoggedIn.userLoggedIn();
+
   runApp(
     MaterialApp(
-      title: 'Various login tests',
-      home: MyHomePage(),
-    ),
+        title: 'Various login tests',
+        home: _loggedIn ? ChangeHabits() : LoginPage() // (仮)
+        ),
   );
-}
-
-class MyHomePage extends StatefulWidget {
-  @override
-  State createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Various login tests')),
-      body: Column(
-        children: <Widget>[
-          MailAndPassLogin(),
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text('----------'),
-          ),
-          GoogleLogin(),
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text('----------'),
-          ),
-          GoogleLoginVer2(),
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text('----------'),
-          ),
-          BuildFacebookLoginButton(),
-        ],
-      ),
-    );
-  }
 }

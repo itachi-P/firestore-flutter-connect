@@ -58,6 +58,7 @@ Future<AuthResult> _signIn(String email, String password) async {
   final _firebaseAuth = FirebaseAuth.instance;
   final AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
       email: email, password: password);
-  print("Email login was successful. \n UserID is ${result.user.uid}");
+  print(
+      "Email login was successful. \n result: $result \n UserID is ${result.user.uid}");
   return result;
 }
