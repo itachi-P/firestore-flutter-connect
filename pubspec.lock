@@ -137,6 +137,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_twitter_login:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: aba1223f224fd46b564d582e1f9af82f1a2df7d0
+      url: "git://github.com/eudangeld/flutter_twitter_login.git"
+    source: git
+    version: "1.1.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter

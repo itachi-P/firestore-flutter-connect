@@ -53,6 +53,7 @@
                 <array>
                     <string>com.googleusercontent.apps.339640322048-o15h07m5fue4vgk031sq7i8nhk4mukm6</string>
                     <string>fb202647027638404</string>
+                    <string>twitterkit-E78pLyZpDIt8MIVhfGtSWYu6s</string>
                 </array>
             </dict>
         </array>
@@ -62,8 +63,6 @@
         <key>FacebookAppID</key>
         <string>202647027638404</string>
         <key>FacebookDisplayName</key>
-
-        <!-- アプリ名に変更 -->
         <string>auth-flutter-sample</string>
 
         <key>LSApplicationQueriesSchemes</key>
@@ -72,6 +71,8 @@
             <string>fb-messenger-share-api</string>
             <string>fbauth2</string>
             <string>fbshareextension</string>
+            <string>twitter</string>
+            <string>twitterauth</string>
         </array>
 </dict>
 </plist>

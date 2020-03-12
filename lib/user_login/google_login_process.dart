@@ -91,6 +91,8 @@ class _GoogleLoginProcessState extends State {
         children: [
           loggedIn ? loginText : logoutText,
           loggedIn ? logoutButton : loginButton,
+          // TODO ここにログイン完了後にアクセスするページを切り分ける処理を書くべきか？
+          // それともこのファイルの別の場所 55行目login()の前後か、はたまた呼び出し元か？
         ],
       ),
     );

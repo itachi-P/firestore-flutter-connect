@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fireflutter/user_login/user_logged_in.dart';
 import 'package:flutter/material.dart';
 
 class MailAndPassLogin extends StatelessWidget {
   // Login with email and password
   final emailInputController = TextEditingController();
   final passwordInputController = TextEditingController();
+  //UserLoggedIn _userLoggedIn
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +42,10 @@ class MailAndPassLogin extends StatelessWidget {
                     var email = emailInputController.text;
                     var password = passwordInputController.text;
                     // ログイン処理(別途Firebase管理画面でユーザー登録が必要)
-                    return _signIn(email, password)
-                        .then((AuthResult result) => print(result.user))
-                        .catchError((e) => print(e));
+                    return _signIn(email, password).then((AuthResult result) {
+                      print(result.user);
+                      UserLoggedIn();
+                    }).catchError((e) => print(e));
                   },
                 ),
               ),
