@@ -11,25 +11,8 @@ enum EnumAuth {
   facebook,
 }
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'auth sample',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: AuthPage(
-        title: 'Auth Sample with Firebase',
-      ),
-    );
-  }
-}
-
-class AuthPage extends StatefulWidget {
-  AuthPage({
+class SnsLogin extends StatefulWidget {
+  SnsLogin({
     Key key,
     this.title,
   }) : super(
@@ -39,10 +22,10 @@ class AuthPage extends StatefulWidget {
   final String title;
 
   @override
-  _AuthPageState createState() => _AuthPageState();
+  _SnsLoginState createState() => _SnsLoginState();
 }
 
-class _AuthPageState extends State<AuthPage> {
+class _SnsLoginState extends State<SnsLogin> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final TwitterLogin twitterLogin = TwitterLogin(
