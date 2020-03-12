@@ -46,8 +46,8 @@ class _AuthPageState extends State<AuthPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final TwitterLogin twitterLogin = TwitterLogin(
-    consumerKey: "E78pLyZpDIt8MIVhfGtSWYu6s",
-    consumerSecret: "4qei7dUd3X8ghHOwgU9bzdPECIfZfVjAEwfMPAy9ZrsAqADbdq",
+    consumerKey: "consumerKey",
+    consumerSecret: "consumerSecret",
   );
   final FacebookLogin facebookSignIn = FacebookLogin();
 
