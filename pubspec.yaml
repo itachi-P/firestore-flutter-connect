@@ -19,6 +19,8 @@ dependencies:
     git:
       url: git://github.com/eudangeld/flutter_twitter_login.git
 
+  intl: ^0.16.1
+
   cupertino_icons: ^0.1.2
 
 dev_dependencies:

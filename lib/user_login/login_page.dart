@@ -1,9 +1,7 @@
+// flutter
 import 'package:flutter/material.dart';
-
-import 'facebook_login_process.dart';
-import 'google_login_process.dart';
-import 'mail_login_form.dart';
-import 'twitter_login_process.dart';
+// Pages
+import 'sns_login.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -17,7 +15,7 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(title: Text('Various login tests')),
       body: Column(
         children: <Widget>[
-          MailAndPassLogin(),
+          //MailAndPassLogin(),
           Padding(
             padding: EdgeInsets.all(8.0),
             child: Text('----------'),
