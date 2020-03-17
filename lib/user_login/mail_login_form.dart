@@ -42,9 +42,8 @@ class MailAndPassLogin extends StatelessWidget {
                     var email = emailInputController.text;
                     var password = passwordInputController.text;
                     // ログイン処理(別途Firebase管理画面でユーザー登録が必要)
-                    return _signIn(email, password).then((AuthResult result) {
-                      print(result.user);
-                      UserLoggedIn();
+                    return _signIn(email, password).then((FirebaseUser user) {
+                      print(user);
                     }).catchError((e) => print(e));
                   },
                 ),
@@ -57,10 +56,11 @@ class MailAndPassLogin extends StatelessWidget {
   }
 }
 
-Future<AuthResult> _signIn(String email, String password) async {
+Future<FirebaseUser> _signIn(String email, String password) async {
   final _firebaseAuth = FirebaseAuth.instance;
   final AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
       email: email, password: password);
+  final FirebaseUser user = result.user;
   print("Email login was successful. \n UserID is ${result.user.uid}");
-  return result;
+  return user;
 }
