@@ -12,14 +12,6 @@ enum EnumAuth {
 }
 
 class SnsLogin extends StatefulWidget {
-  SnsLogin({
-    Key key,
-    this.title,
-  }) : super(
-          key: key,
-        );
-
-  final String title;
 
   @override
   _SnsLoginState createState() => _SnsLoginState();
@@ -29,8 +21,8 @@ class _SnsLoginState extends State<SnsLogin> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final TwitterLogin twitterLogin = TwitterLogin(
-    consumerKey: "consumerKey",
-    consumerSecret: "consumerSecret",
+    consumerKey: "xxxxxxxxxx",
+    consumerSecret: "xxxxxxxxxx",
   );
   final FacebookLogin facebookSignIn = FacebookLogin();
 
@@ -55,10 +47,10 @@ class _SnsLoginState extends State<SnsLogin> {
     });
   }
 
-  Future signInWithGoogle() async {
+  Future<FirebaseUser> signInWithGoogle() async {
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount.authentication;
+    await googleSignInAccount.authentication;
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleSignInAuthentication.accessToken,
@@ -76,6 +68,7 @@ class _SnsLoginState extends State<SnsLogin> {
     assert(user.uid == currentUser.uid);
     login();
     setEnumAuth(EnumAuth.google);
+    return user;
   }
 
   Future signInWithTwitter() async {
@@ -197,12 +190,7 @@ class _SnsLoginState extends State<SnsLogin> {
       ],
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(widget.title),
-      ),
-      body: Center(
+    return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -210,7 +198,6 @@ class _SnsLoginState extends State<SnsLogin> {
             loggedIn ? logoutBtn : loginBtns,
           ],
         ),
-      ),
     );
   }
 }
