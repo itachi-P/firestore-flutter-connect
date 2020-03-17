@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-
+@immutable
 class PrimaryButton extends StatelessWidget {
   PrimaryButton({this.key, this.text, this.height, this.onPressed}) : super(key: key);
-  Key key;
-  String text;
-  double height;
-  VoidCallback onPressed;
+  final Key key;
+  final String text;
+  final double height;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return new ConstrainedBox(
+    return ConstrainedBox(
       constraints: BoxConstraints.expand(height: height),
-      child: new RaisedButton(
-          child: new Text(text, style: new TextStyle(color: Colors.white, fontSize: 20.0)),
-          shape: new RoundedRectangleBorder(
+      child: RaisedButton(
+          child: Text(text, style: TextStyle(color: Colors.white, fontSize: 20.0)),
+          shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(height / 2))),
           color: Colors.blue,
           textColor: Colors.black87,

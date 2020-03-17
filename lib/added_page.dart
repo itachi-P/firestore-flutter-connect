@@ -54,7 +54,7 @@ class _InputDropdown extends StatelessWidget {
   }
 }
 
-// 購入日：日付Picker
+// 開始日：日付Picker
 class _DateTimePicker extends StatelessWidget {
   const _DateTimePicker({
     Key key,
@@ -71,8 +71,8 @@ class _DateTimePicker extends StatelessWidget {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime.now().add(new Duration(days: -365)),
-        lastDate: DateTime.now().add(new Duration(days: 365))
+        firstDate: DateTime.now().add(Duration(days: -365)),
+        lastDate: DateTime.now().add(Duration(days: 365))
     );
     if (picked != null && picked != selectedDate)
       selectDate(picked);
@@ -99,11 +99,10 @@ class _DateTimePicker extends StatelessWidget {
 }
 
 class _AddedPageState extends State<AddedPage> {
-  static final formKey = new GlobalKey<FormState>();
+  static final formKey = GlobalKey<FormState>();
 
-  String _buyUid = '';
   String _billingUid = '';
-  DateTime _buyDate = DateTime.now(); // 購入日
+  DateTime _buyDate = DateTime.now(); // 開始日
   String _buyItem = '';               // 商品
   String _buyAmount = '';             // 購入金額
   List _payMethods = ["現金", "デビット", "交通系IC", "クレジット", "ポイント", "その他"];
@@ -113,11 +112,11 @@ class _AddedPageState extends State<AddedPage> {
 
 
   List<DropdownMenuItem<String>> getDropDownMenuItems() {
-    List<DropdownMenuItem<String>> items = new List();
+    List<DropdownMenuItem<String>> items = List();
     for (String city in _payMethods) {
-      items.add(new DropdownMenuItem(
+      items.add(DropdownMenuItem(
           value: city,
-          child: new Text(city)
+          child: Text(city)
       ));
     }
     return items;
@@ -156,7 +155,7 @@ class _AddedPageState extends State<AddedPage> {
   }
 
   // 登録ボタン
-  void onPressdClaimCreate() async {
+  void onPressedGoalSetting() async {
 
     setState(() {
       _authHint = '';
@@ -166,7 +165,7 @@ class _AddedPageState extends State<AddedPage> {
       // Formエラーがない場合
       try {
 
-        print('>>> Click：onPressdClaimCreate');
+        print('>>> Click：onPressdGoalSetting');
         print(_buyDate);
         print(_buyItem);
         print(_buyAmount);
@@ -201,9 +200,9 @@ class _AddedPageState extends State<AddedPage> {
   // 入力フォーム
   List<Widget> inputForm() {
     return [
-      padded(child: new _DateTimePicker(
-          key: new Key('購入日'),
-          labelText: '購入日',
+      padded(child: _DateTimePicker(
+          key: Key('開始日'),
+          labelText: '開始日',
           selectedDate: _buyDate,
           selectDate: (DateTime date) {
             setState(() {
@@ -212,85 +211,90 @@ class _AddedPageState extends State<AddedPage> {
           }
       )),
       padded(child: new TextFormField(
-        key: new Key('購入品'),
+        key: Key('購入品'),
         decoration: new InputDecoration(labelText: '購入品'),
         autocorrect: false,
         validator: (val) => val.isEmpty ? '購入品を入力してください' : null,
         onSaved: (val) => _buyItem = val,
       )),
       padded(child: new TextFormField(
-          key: new Key('購入金額'),
+          key: Key('購入金額'),
           decoration: new InputDecoration(labelText: '購入金額'),
           autocorrect: false,
           validator: (val) => val.isEmpty ? '購入金額を入力してください' : null,
           onSaved: (val) => _buyAmount = val,
           keyboardType: TextInputType.number
       )),
-      padded(child: new DropdownButtonHideUnderline(
-          child: new ButtonTheme(
+      padded(
+          child: DropdownButtonHideUnderline(
+            child: ButtonTheme(
               alignedDropdown: true,
-              child: new DropdownButton(
-                key: new Key('支払方法'),
+              child: DropdownButton(
+                key: Key('支払方法'),
                 value: _currentPayMethod,
                 items: getDropDownMenuItems(),
                 onChanged: changedDropDownItem,
-              )
-          )
-      )),
-      padded(child: new TextFormField(
-        key: new Key('請求先'),
-        decoration: new InputDecoration(labelText: '請求先'),
-        autocorrect: false,
-        initialValue: _billingUid,
-        validator: (val) => val.isEmpty ? '請求先を指定してください' : null,
-        onSaved: (val) => _billingUid = val,
-      )),
+              ),
+          ),
+        ),
+      ),
+      padded(
+        child: TextFormField(
+          key: Key('請求先'),
+          decoration: InputDecoration(labelText: '請求先'),
+          autocorrect: false,
+          initialValue: _billingUid,
+          validator: (val) => val.isEmpty ? '請求先を指定してください' : null,
+          onSaved: (val) => _billingUid = val,
+        ),
+      ),
     ];
   }
 
 
   Widget hintText() {
-    return new Container(
+    return Container(
       //height: 80.0,
         padding: const EdgeInsets.all(32.0),
-        child: new Text(
+        child: Text(
             _authHint,
-            key: new Key('hint'),
-            style: new TextStyle(fontSize: 18.0, color: Colors.grey),
+            key: Key('hint'),
+            style: TextStyle(fontSize: 18.0, color: Colors.grey),
             textAlign: TextAlign.center)
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('請求画面(´・ω・｀)'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('日々の目標設定'),
         actions: <Widget>[
-          new FlatButton(
+          FlatButton(
               onPressed: _dashboard,
-              child: new Text('ダッシュボードへ', style: new TextStyle(fontSize: 17.0, color: Colors.white))
+              child: Text('目的設定', style: TextStyle(fontSize: 17.0, color: Colors.white))
           ),
-          new FlatButton(
+          FlatButton(
               onPressed: _signOut,
-              child: new Text('サインアウト', style: new TextStyle(fontSize: 17.0, color: Colors.white))
+              child: Text('ログアウト', style: TextStyle(fontSize: 17.0, color: Colors.white))
           )
         ],
       ),
       backgroundColor: Colors.grey[300],
-      body: new SingleChildScrollView(child: new Container(
+      body: SingleChildScrollView(
+        child: Container(
           padding: const EdgeInsets.all(16.0),
-          child: new Column(
+          child: Column(
               children: [
-                new Card(
-                    child: new Column(
+                Card(
+                    child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          new Container(
+                          Container(
                               padding: const EdgeInsets.all(16.0),
-                              child: new Form(
+                              child: Form(
                                   key: formKey,
-                                  child: new Column(
+                                  child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: inputForm(),
                                   )
@@ -301,16 +305,17 @@ class _AddedPageState extends State<AddedPage> {
                 hintText()
               ]
           )
-      )),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
-        onPressed: onPressdClaimCreate,
+        onPressed: onPressedGoalSetting,
         child: Icon(Icons.add),
       ),
     );
   }
 
   Widget padded({Widget child}) {
-    return new Padding(
+    return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.0),
       child: child,
     );

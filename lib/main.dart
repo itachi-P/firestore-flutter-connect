@@ -35,7 +35,7 @@ class RootPage extends StatefulWidget {
 enum AuthStatus {
   notSignedIn,
   signedIn,
-  signedUp
+  signUp
 }
 
 // カレントページ ↓ (01) 認証状態と画面情報定義
@@ -63,33 +63,6 @@ class _RootPageState extends State<RootPage> {
     });
   }
 
-  // ダイアログ表示メソッド
-  void _buildDialog(BuildContext context, String message) {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: Text("Message: $message"),
-            actions: <Widget>[
-              FlatButton(
-                child: const Text('CLOSE'),
-                onPressed: () {
-                  Navigator.pop(context, false);
-                },
-              ),
-              FlatButton(
-                child: const Text('SHOW'),
-                onPressed: () {
-                  Navigator.pop(context, true);
-                },
-              ),
-            ],
-          );
-        }
-    );
-  }
-
   // 認証状態更新 ↓ (03)Stateを更新する処理
   void _updateAuthStatus(AuthStatus status) {
     setState(() {
@@ -115,7 +88,7 @@ class _RootPageState extends State<RootPage> {
           title: 'Flutter Firebase SignIn',
           auth: widget.auth,
           onSignIn: () => _updateAuthStatus(AuthStatus.signedIn),
-          onSignUp: () => _updateAuthStatus(AuthStatus.signedUp),
+          onSignUp: () => _updateAuthStatus(AuthStatus.signUp),
         );
       case AuthStatus.signedIn:
         switch (currentPage) {
@@ -137,7 +110,8 @@ class _RootPageState extends State<RootPage> {
             );
         }
         break;
-      case AuthStatus.signedUp:
+      //case AuthStatus.signUp:
+      default:
         print('■ サインアップ');
         // 新規登録ページ
         return SignUp(
