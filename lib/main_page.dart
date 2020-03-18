@@ -3,16 +3,16 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'user_login/src/auth.dart';
 
-class AddedPage extends StatefulWidget {
+class MainPage extends StatefulWidget {
 
-  AddedPage({Key key, this.auth, this.onSignOut, this.currentPageDashboardSet}) : super(key: key);
+  MainPage({Key key, this.auth, this.onSignOut, this.currentPageDashboardSet}) : super(key: key);
 
   final BaseAuth auth;
   final VoidCallback onSignOut;
   final VoidCallback currentPageDashboardSet;
 
   @override
-  _AddedPageState createState() => _AddedPageState();
+  _MainPageState createState() => _MainPageState();
 }
 
 class _InputDropdown extends StatelessWidget {
@@ -98,7 +98,7 @@ class _DateTimePicker extends StatelessWidget {
   }
 }
 
-class _AddedPageState extends State<AddedPage> {
+class _MainPageState extends State<MainPage> {
   static final formKey = GlobalKey<FormState>();
 
   String _billingUid = '';

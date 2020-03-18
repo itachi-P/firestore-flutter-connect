@@ -69,16 +69,16 @@ class _SignInState extends State<SignIn> {
         key: new Key('email'),
         decoration: new InputDecoration(labelText: 'Email'),
         autocorrect: false,
-        validator: (val) => val.isEmpty ? 'Email can\'t be empty.' : null,
-        onSaved: (val) => _email = val,
+        validator: (value) => value.isEmpty ? 'Email can\'t be empty.' : null,
+        onSaved: (value) => _email = value.trim(),
       )),
       padded(child: new TextFormField(
         key: new Key('password'),
         decoration: new InputDecoration(labelText: 'Password'),
         obscureText: true,
         autocorrect: false,
-        validator: (val) => val.isEmpty ? 'Password can\'t be empty.' : null,
-        onSaved: (val) => _password = val,
+        validator: (value) => value.isEmpty ? 'Password can\'t be empty.' : null,
+        onSaved: (value) => _password = value.trim(),
       )),
     ];
   }

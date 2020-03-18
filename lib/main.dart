@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-//import 'user_login/login_page.dart';
 import 'user_login/src/auth.dart';
 import 'user_login/sign_in.dart';
 import 'user_login/sign_up.dart';
-import 'new_app.dart';
-import 'added_page.dart';
+import 'start_page.dart';
+import 'main_page.dart';
 
 void main() => runApp(MyApp());
 
+/// This Widget is the main application widget.
 class MyApp extends StatelessWidget {
   // This widget is the root of application.
   @override
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Firebase Login',
       theme: ThemeData(
-        primarySwatch: Colors.orange,
+        primarySwatch: Colors.green,
       ),
       home: RootPage(auth: Auth()),
     );
@@ -95,7 +95,7 @@ class _RootPageState extends State<RootPage> {
           case CurrentPage.addedPage:
             print('■ 追加画面');
             // 追加画面
-            return AddedPage(
+            return MainPage(
                 auth: widget.auth,
                 onSignOut: () => _updateAuthStatus(AuthStatus.notSignedIn),
                 currentPageDashboardSet: () => _updateCurrentPage(CurrentPage.newApp)
@@ -103,10 +103,10 @@ class _RootPageState extends State<RootPage> {
           default:
             print('■ Change habits');
             // アプリ本体スタート画面
-            return NewApp(
+            return GoalSetting(
                 auth: widget.auth,
                 onSignOut: () => _updateAuthStatus(AuthStatus.notSignedIn),
-                currentPageClaimSet: () => _updateCurrentPage(CurrentPage.addedPage)
+                currentPageGoalSet: () => _updateCurrentPage(CurrentPage.addedPage)
             );
         }
         break;
