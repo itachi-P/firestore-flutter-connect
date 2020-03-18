@@ -47,7 +47,7 @@ class _SnsLoginState extends State<SnsLogin> {
     });
   }
 
-  Future<FirebaseUser> signInWithGoogle() async {
+  Future<String> signInWithGoogle() async {
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
     await googleSignInAccount.authentication;
@@ -68,10 +68,10 @@ class _SnsLoginState extends State<SnsLogin> {
     assert(user.uid == currentUser.uid);
     login();
     setEnumAuth(EnumAuth.google);
-    return user;
+    return user.uid;
   }
 
-  Future signInWithTwitter() async {
+  Future<String> signInWithTwitter() async {
     // twitter認証の許可画面が出現
     final TwitterLoginResult result = await twitterLogin.authorize();
 
@@ -93,9 +93,10 @@ class _SnsLoginState extends State<SnsLogin> {
 
     login();
     setEnumAuth(EnumAuth.twitter);
+    return user.uid;
   }
 
-  Future signInWithFacebook() async {
+  Future<String> signInWithFacebook() async {
     final facebookLogin = FacebookLogin();
     // final facebookLoginResult =
     //     await facebookLogin.loginWithPublishPermissions((['email']));
@@ -116,6 +117,7 @@ class _SnsLoginState extends State<SnsLogin> {
 
     login();
     setEnumAuth(EnumAuth.facebook);
+    return user.uid;
   }
 
   void signOutGoogle() async {
