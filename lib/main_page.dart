@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'user_login/src/auth.dart';
 
 class MainPage extends StatefulWidget {
-
-  MainPage({Key key, this.auth, this.onSignOut, this.currentPageDashboardSet}) : super(key: key);
+  MainPage({Key key, this.auth, this.onSignOut, this.currentPageDashboardSet})
+      : super(key: key);
 
   final BaseAuth auth;
   final VoidCallback onSignOut;
@@ -16,13 +16,14 @@ class MainPage extends StatefulWidget {
 }
 
 class _InputDropdown extends StatelessWidget {
-  const _InputDropdown({
-    Key key,
-    this.child,
-    this.labelText,
-    this.valueText,
-    this.valueStyle,
-    this.onPressed }) : super(key: key);
+  const _InputDropdown(
+      {Key key,
+      this.child,
+      this.labelText,
+      this.valueText,
+      this.valueStyle,
+      this.onPressed})
+      : super(key: key);
 
   final String labelText;
   final String valueText;
@@ -45,8 +46,9 @@ class _InputDropdown extends StatelessWidget {
           children: <Widget>[
             Text(valueText, style: valueStyle),
             Icon(Icons.arrow_drop_down,
-                color: Theme.of(context).brightness == Brightness.light ? Colors.grey.shade700 : Colors.white70
-            ),
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Colors.grey.shade700
+                    : Colors.white70),
           ],
         ),
       ),
@@ -56,12 +58,9 @@ class _InputDropdown extends StatelessWidget {
 
 // 開始日：日付Picker
 class _DateTimePicker extends StatelessWidget {
-  const _DateTimePicker({
-    Key key,
-    this.labelText,
-    this.selectedDate,
-    this.selectDate
-  }) : super(key: key);
+  const _DateTimePicker(
+      {Key key, this.labelText, this.selectedDate, this.selectDate})
+      : super(key: key);
 
   final String labelText;
   final DateTime selectedDate;
@@ -72,10 +71,8 @@ class _DateTimePicker extends StatelessWidget {
         context: context,
         initialDate: selectedDate,
         firstDate: DateTime.now().add(Duration(days: -365)),
-        lastDate: DateTime.now().add(Duration(days: 365))
-    );
-    if (picked != null && picked != selectedDate)
-      selectDate(picked);
+        lastDate: DateTime.now().add(Duration(days: 365)));
+    if (picked != null && picked != selectedDate) selectDate(picked);
   }
 
   @override
@@ -90,7 +87,9 @@ class _DateTimePicker extends StatelessWidget {
             labelText: labelText,
             valueText: DateFormat("yyyy-MM-dd").format(selectedDate),
             valueStyle: valueStyle,
-            onPressed: () { _selectDate(context); },
+            onPressed: () {
+              _selectDate(context);
+            },
           ),
         ),
       ],
@@ -103,21 +102,17 @@ class _MainPageState extends State<MainPage> {
 
   String _billingUid = '';
   DateTime _buyDate = DateTime.now(); // 開始日
-  String _buyItem = '';               // 商品
-  String _buyAmount = '';             // 購入金額
+  String _buyItem = ''; // 商品
+  String _buyAmount = ''; // 購入金額
   List _payMethods = ["現金", "デビット", "交通系IC", "クレジット", "ポイント", "その他"];
   String _currentPayMethod;
 
   String _authHint = '';
 
-
   List<DropdownMenuItem<String>> getDropDownMenuItems() {
     List<DropdownMenuItem<String>> items = List();
     for (String city in _payMethods) {
-      items.add(DropdownMenuItem(
-          value: city,
-          child: Text(city)
-      ));
+      items.add(DropdownMenuItem(value: city, child: Text(city)));
     }
     return items;
   }
@@ -156,7 +151,6 @@ class _MainPageState extends State<MainPage> {
 
   // 登録ボタン
   void onPressedGoalSetting() async {
-
     setState(() {
       _authHint = '';
     });
@@ -164,7 +158,6 @@ class _MainPageState extends State<MainPage> {
     if (validateAndSave()) {
       // Formエラーがない場合
       try {
-
         print('>>> Click：onPressdGoalSetting');
         print(_buyDate);
         print(_buyItem);
@@ -187,8 +180,7 @@ class _MainPageState extends State<MainPage> {
         //                       );
         // print(resp);
 
-      }
-      catch (e) {
+      } catch (e) {
         setState(() {
           _authHint = 'Sign In Error\n\n${e.toString()}';
         });
@@ -200,41 +192,42 @@ class _MainPageState extends State<MainPage> {
   // 入力フォーム
   List<Widget> inputForm() {
     return [
-      padded(child: _DateTimePicker(
-          key: Key('開始日'),
-          labelText: '開始日',
-          selectedDate: _buyDate,
-          selectDate: (DateTime date) {
-            setState(() {
-              _buyDate = date;
-            });
-          }
-      )),
-      padded(child: new TextFormField(
+      padded(
+          child: _DateTimePicker(
+              key: Key('開始日'),
+              labelText: '開始日',
+              selectedDate: _buyDate,
+              selectDate: (DateTime date) {
+                setState(() {
+                  _buyDate = date;
+                });
+              })),
+      padded(
+          child: TextFormField(
         key: Key('購入品'),
-        decoration: new InputDecoration(labelText: '購入品'),
+        decoration: InputDecoration(labelText: '購入品'),
         autocorrect: false,
         validator: (val) => val.isEmpty ? '購入品を入力してください' : null,
         onSaved: (val) => _buyItem = val,
       )),
-      padded(child: new TextFormField(
-          key: Key('購入金額'),
-          decoration: new InputDecoration(labelText: '購入金額'),
-          autocorrect: false,
-          validator: (val) => val.isEmpty ? '購入金額を入力してください' : null,
-          onSaved: (val) => _buyAmount = val,
-          keyboardType: TextInputType.number
-      )),
       padded(
-          child: DropdownButtonHideUnderline(
-            child: ButtonTheme(
-              alignedDropdown: true,
-              child: DropdownButton(
-                key: Key('支払方法'),
-                value: _currentPayMethod,
-                items: getDropDownMenuItems(),
-                onChanged: changedDropDownItem,
-              ),
+          child: TextFormField(
+              key: Key('購入金額'),
+              decoration: InputDecoration(labelText: '購入金額'),
+              autocorrect: false,
+              validator: (val) => val.isEmpty ? '購入金額を入力してください' : null,
+              onSaved: (val) => _buyAmount = val,
+              keyboardType: TextInputType.number)),
+      padded(
+        child: DropdownButtonHideUnderline(
+          child: ButtonTheme(
+            alignedDropdown: true,
+            child: DropdownButton(
+              key: Key('支払方法'),
+              value: _currentPayMethod,
+              items: getDropDownMenuItems(),
+              onChanged: changedDropDownItem,
+            ),
           ),
         ),
       ),
@@ -251,17 +244,14 @@ class _MainPageState extends State<MainPage> {
     ];
   }
 
-
   Widget hintText() {
     return Container(
-      //height: 80.0,
+        //height: 80.0,
         padding: const EdgeInsets.all(32.0),
-        child: Text(
-            _authHint,
+        child: Text(_authHint,
             key: Key('hint'),
             style: TextStyle(fontSize: 18.0, color: Colors.grey),
-            textAlign: TextAlign.center)
-    );
+            textAlign: TextAlign.center));
   }
 
   @override
@@ -272,40 +262,33 @@ class _MainPageState extends State<MainPage> {
         actions: <Widget>[
           FlatButton(
               onPressed: _dashboard,
-              child: Text('目的設定', style: TextStyle(fontSize: 17.0, color: Colors.white))
-          ),
+              child: Text('目的設定',
+                  style: TextStyle(fontSize: 17.0, color: Colors.white))),
           FlatButton(
               onPressed: _signOut,
-              child: Text('ログアウト', style: TextStyle(fontSize: 17.0, color: Colors.white))
-          )
+              child: Text('ログアウト',
+                  style: TextStyle(fontSize: 17.0, color: Colors.white)))
         ],
       ),
       backgroundColor: Colors.grey[300],
       body: SingleChildScrollView(
         child: Container(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-              children: [
-                Card(
-                    child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Container(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Form(
-                                  key: formKey,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    children: inputForm(),
-                                  )
-                              )
-                          ),
-                        ])
-                ),
-                hintText()
-              ]
-          )
-        ),
+            padding: const EdgeInsets.all(16.0),
+            child: Column(children: [
+              Card(
+                  child:
+                      Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                Container(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Form(
+                        key: formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: inputForm(),
+                        ))),
+              ])),
+              hintText()
+            ])),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: onPressedGoalSetting,

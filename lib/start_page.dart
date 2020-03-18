@@ -16,9 +16,9 @@ class _GoalSettingState extends State<GoalSetting> {
   final _formKey = GlobalKey<FormState>();
 
   String _goal = '習慣化したい目標・変えたい習慣';
-  String _maximumGoal = '最高目標';
-  String _middleGoal = '中間目標';
-  String _minimumGoal = '最低目標';
+  String _good;
+  String _passing;
+  String _failing;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class _GoalSettingState extends State<GoalSetting> {
 
     // 登録ボタン
     void onPressedGoalSetting() async {
-      print('設定値: $_goal $_maximumGoal $_middleGoal $_minimumGoal');
+      print('設定値: $_goal $_good $_passing $_failing');
       setState(() {
         //_goal = value;
       });
@@ -94,7 +94,7 @@ class _GoalSettingState extends State<GoalSetting> {
         ),
         autocorrect: false,
         //initialValue: _goal = 'aaa',
-        validator: (String value) => value.isEmpty ? '新しい習慣を入力してください' : null,
+        validator: (value) => value.isEmpty ? '新しい習慣を入力してください' : null,
         onSaved: (String value) => _goal = value,
         keyboardType: TextInputType.text,
       )),
@@ -103,40 +103,38 @@ class _GoalSettingState extends State<GoalSetting> {
         key: Key('最高目標'),
         decoration: InputDecoration(labelText: '最高目標'),
         autocorrect: false,
-        //initialValue: _maximumGoal = 'bbb',
-        validator: (val) => val.isEmpty ? '最高目標を入力してください' : null,
-        onSaved: (val) => _maximumGoal = val,
+        validator: (value) => value.isEmpty ? '最高目標を入力してください' : null,
+        onSaved: (value) => _good = value,
       )),
       padded(
           child: TextFormField(
         key: Key('中間目標'),
         decoration: InputDecoration(labelText: '中間目標'),
         autocorrect: false,
-        //initialValue: _middleGoal = 'ccc',
-        validator: (val) => val.isEmpty ? '中間目標を指定してください' : null,
-        onSaved: (val) => _middleGoal = val,
+        validator: (value) => value.isEmpty ? '中間目標を指定してください' : null,
+        onSaved: (value) => _passing = value,
       )),
       padded(
           child: TextFormField(
         key: Key('最低目標'),
         decoration: InputDecoration(labelText: '最低目標'),
         autocorrect: false,
-        //initialValue: _minimumGoal = 'ddd',
-        validator: (val) => val.isEmpty ? '最低目標を指定してください' : null,
-        onSaved: (val) => _minimumGoal = val,
+        validator: (value) => value.isEmpty ? '最低目標を指定してください' : null,
+        onSaved: (value) => _failing = value,
       )),
       padded(
-          child: RaisedButton(
-        onPressed: () {
-          if (_formKey.currentState.validate()) {
-            setState(() {
-              // TODO 4つの入力値からStringに保持
-              //_goal = _formKey.;
-            });
-          }
-        },
-        child: Text('登録する'),
-      ))
+        child: RaisedButton(
+          onPressed: () {
+            if (_formKey.currentState.validate()) {
+              setState(() {
+                // TODO 4つの入力値をStateに保持
+                _formKey.currentState.save();
+              });
+            }
+          },
+          child: Text('登録する'),
+        ),
+      ),
     ];
   }
 

@@ -75,23 +75,23 @@ class _SignUpState extends State<SignUp> {
   // 入力フォーム
   List<Widget> usernameAndPassword() {
     return [
-      padded(child: new TextFormField(
-        key: new Key('displayName'),
-        decoration: new InputDecoration(labelText: 'Name'),
+      padded(child: TextFormField(
+        key: Key('displayName'),
+        decoration: InputDecoration(labelText: 'Name'),
         autocorrect: false,
         validator: (value) => value.isEmpty ? 'Name can\'t be empty.' : null,
         onSaved: (value) => _displayName = value,
       )),
-      padded(child: new TextFormField(
-        key: new Key('email'),
-        decoration: new InputDecoration(labelText: 'Email'),
+      padded(child: TextFormField(
+        key: Key('email'),
+        decoration: InputDecoration(labelText: 'Email'),
         autocorrect: false,
         validator: (value) => value.isEmpty ? 'Email can\'t be empty.' : null,
         onSaved: (value) => _email = value.trim(),
       )),
-      padded(child: new TextFormField(
-        key: new Key('password'),
-        decoration: new InputDecoration(labelText: 'Password'),
+      padded(child: TextFormField(
+        key: Key('password'),
+        decoration: InputDecoration(labelText: 'Password'),
         obscureText: true,
         autocorrect: false,
         validator: (value) => value.isEmpty ? 'Password can\'t be empty.' : null,
@@ -103,16 +103,16 @@ class _SignUpState extends State<SignUp> {
   // ボタン
   List<Widget> submitWidgets() {
     return [
-      new PrimaryButton(
-          key: new Key('register'),
+      PrimaryButton(
+          key: Key('register'),
           text: 'サインアップ',
           height: 44.0,
           onPressed: onPressSignUp
       ),
-      new FlatButton(
-          key: new Key('login'),
+      FlatButton(
+          key: Key('login'),
           textColor: Colors.green,
-          child: new Text("既にアカウントをお持ちの方：サインイン"),
+          child: Text("既にアカウントをお持ちの方：サインイン"),
           onPressed: onPressSignIn
       ),
     ];
@@ -122,10 +122,10 @@ class _SignUpState extends State<SignUp> {
     return new Container(
       //height: 80.0,
         padding: const EdgeInsets.all(32.0),
-        child: new Text(
+        child: Text(
             _authHint,
-            key: new Key('hint'),
-            style: new TextStyle(fontSize: 18.0, color: Colors.grey),
+            key: Key('hint'),
+            style: TextStyle(fontSize: 18.0, color: Colors.grey),
             textAlign: TextAlign.center)
     );
   }
