@@ -93,8 +93,8 @@ class _RootPageState extends State<RootPage> {
       case AuthStatus.signedIn:
         switch (currentPage) {
           case CurrentPage.addedPage:
-            print('■ 追加画面');
-            // 追加画面
+            print('■ メイン画面');
+            // メイン画面
             return MainPage(
                 auth: widget.auth,
                 onSignOut: () => _updateAuthStatus(AuthStatus.notSignedIn),
