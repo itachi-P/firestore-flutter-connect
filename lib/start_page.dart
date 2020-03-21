@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'user_login/src/auth.dart';
 
@@ -16,7 +17,7 @@ class _GoalSettingState extends State<GoalSetting> {
   final _formKey = GlobalKey<FormState>();
 
   String _goal = '習慣化したい目標・変えたい習慣';
-  String _good;
+  String _achievement;
   String _passing;
   String _failing;
 
@@ -29,17 +30,6 @@ class _GoalSettingState extends State<GoalSetting> {
       } catch (e) {
         print(e);
       }
-    }
-
-    // 登録ボタン
-    void onPressedGoalSetting() async {
-      print('設定値: $_goal $_good $_passing $_failing');
-      setState(() {
-        //_goal = value;
-      });
-
-      // ページセット
-      widget.currentPageGoalSet();
     }
 
     return Scaffold(
@@ -64,13 +54,6 @@ class _GoalSettingState extends State<GoalSetting> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: onPressedGoalSetting,
-        // TODO ここを目標に対する３段階の達成度合い登録機能（別ページに遷移）に変える
-        label: Text("登録する"),
-        icon: Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -104,15 +87,7 @@ class _GoalSettingState extends State<GoalSetting> {
         decoration: InputDecoration(labelText: '最高目標'),
         autocorrect: false,
         validator: (value) => value.isEmpty ? '最高目標を入力してください' : null,
-        onSaved: (value) => _good = value,
-      )),
-      padded(
-          child: TextFormField(
-        key: Key('中間目標'),
-        decoration: InputDecoration(labelText: '中間目標'),
-        autocorrect: false,
-        validator: (value) => value.isEmpty ? '中間目標を指定してください' : null,
-        onSaved: (value) => _passing = value,
+        onSaved: (value) => _achievement = value,
       )),
       padded(
           child: TextFormField(
@@ -120,16 +95,27 @@ class _GoalSettingState extends State<GoalSetting> {
         decoration: InputDecoration(labelText: '最低目標'),
         autocorrect: false,
         validator: (value) => value.isEmpty ? '最低目標を指定してください' : null,
+        onSaved: (value) => _passing = value,
+      )),
+      padded(
+          child: TextFormField(
+        key: Key('不可条件'),
+        decoration: InputDecoration(labelText: '不可条件'),
+        autocorrect: false,
+        validator: (value) => value.isEmpty ? '不可条件を指定してください' : null,
         onSaved: (value) => _failing = value,
       )),
       padded(
         child: RaisedButton(
-          onPressed: () {
+          onPressed: () async {
             if (_formKey.currentState.validate()) {
               setState(() {
                 // TODO 4つの入力値をStateに保持
                 _formKey.currentState.save();
               });
+              print('設定値: $_goal $_achievement $_passing $_failing');
+              // ページセット
+              await widget.currentPageGoalSet();
             }
           },
           child: Text('登録する'),
