@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'user_login/src/auth.dart';
 
@@ -113,7 +112,8 @@ class _GoalSettingState extends State<GoalSetting> {
                 // TODO 4つの入力値をStateに保持
                 _formKey.currentState.save();
               });
-              print('設定値: $_goal $_achievement $_passing $_failing');
+              print('目的: $_goal'
+                  '\n最高目標: $_achievement \n最低目標: $_passing \n不可条件: $_failing');
               // ページセット
               await widget.currentPageGoalSet();
             }

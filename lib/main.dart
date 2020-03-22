@@ -40,8 +40,8 @@ enum AuthStatus {
 
 // カレントページ ↓ (01) 認証状態と画面情報定義
 enum CurrentPage {
-  addedPage,
-  newApp,
+  mainPage,
+  goalSettingPage,
   other
 }
 
@@ -92,13 +92,13 @@ class _RootPageState extends State<RootPage> {
         );
       case AuthStatus.signedIn:
         switch (currentPage) {
-          case CurrentPage.addedPage:
+          case CurrentPage.mainPage:
             print('■ メイン画面');
             // メイン画面
             return MainPage(
                 auth: widget.auth,
                 onSignOut: () => _updateAuthStatus(AuthStatus.notSignedIn),
-                currentPageDashboardSet: () => _updateCurrentPage(CurrentPage.newApp)
+                currentPageDashboardSet: () => _updateCurrentPage(CurrentPage.goalSettingPage)
             );
           default:
             print('■ Change habits');
@@ -106,7 +106,7 @@ class _RootPageState extends State<RootPage> {
             return GoalSetting(
                 auth: widget.auth,
                 onSignOut: () => _updateAuthStatus(AuthStatus.notSignedIn),
-                currentPageGoalSet: () => _updateCurrentPage(CurrentPage.addedPage)
+                currentPageGoalSet: () => _updateCurrentPage(CurrentPage.mainPage)
             );
         }
         break;

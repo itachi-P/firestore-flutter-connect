@@ -1,100 +1,21 @@
-import 'package:intl/intl.dart';
-
 import 'package:flutter/material.dart';
 import 'user_login/src/auth.dart';
 
 class MainPage extends StatefulWidget {
-  MainPage({Key key, this.auth, this.onSignOut, this.currentPageDashboardSet})
+  MainPage({Key key, this.auth, this.onSignOut, this.currentPageDashboardSet, this.goal, this.achievement, this.failing, this.passing})
       : super(key: key);
 
   final BaseAuth auth;
   final VoidCallback onSignOut;
   final VoidCallback currentPageDashboardSet;
 
+  final String goal;
+  final String achievement;
+  final String passing;
+  final String failing;
+
   @override
   _MainPageState createState() => _MainPageState();
-}
-
-class _InputDropdown extends StatelessWidget {
-  const _InputDropdown(
-      {Key key,
-      this.child,
-      this.labelText,
-      this.valueText,
-      this.valueStyle,
-      this.onPressed})
-      : super(key: key);
-
-  final String labelText;
-  final String valueText;
-  final TextStyle valueStyle;
-  final VoidCallback onPressed;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onPressed,
-      child: InputDecorator(
-        decoration: InputDecoration(
-          labelText: labelText,
-        ),
-        baseStyle: valueStyle,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text(valueText, style: valueStyle),
-            Icon(Icons.arrow_drop_down,
-                color: Theme.of(context).brightness == Brightness.light
-                    ? Colors.grey.shade700
-                    : Colors.white70),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// 開始日：日付Picker
-class _DateTimePicker extends StatelessWidget {
-  const _DateTimePicker(
-      {Key key, this.labelText, this.selectedDate, this.selectDate})
-      : super(key: key);
-
-  final String labelText;
-  final DateTime selectedDate;
-  final ValueChanged<DateTime> selectDate;
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime.now().add(Duration(days: -365)),
-        lastDate: DateTime.now().add(Duration(days: 365)));
-    if (picked != null && picked != selectedDate) selectDate(picked);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final TextStyle valueStyle = Theme.of(context).textTheme.title;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: <Widget>[
-        Expanded(
-          flex: 4,
-          child: _InputDropdown(
-            labelText: labelText,
-            valueText: DateFormat("yyyy-MM-dd").format(selectedDate),
-            valueStyle: valueStyle,
-            onPressed: () {
-              _selectDate(context);
-            },
-          ),
-        ),
-      ],
-    );
-  }
 }
 
 class _MainPageState extends State<MainPage> {
@@ -104,7 +25,7 @@ class _MainPageState extends State<MainPage> {
   DateTime _buyDate = DateTime.now(); // 開始日
   String _buyItem = ''; // 商品
   String _buyAmount = ''; // 購入金額
-  List _payMethods = ["現金", "デビット", "交通系IC", "クレジット", "ポイント", "その他"];
+  List _payMethods = ["aaa", "bbb", "ccc"];
   String _currentPayMethod;
 
   String _authHint = '';
@@ -112,6 +33,8 @@ class _MainPageState extends State<MainPage> {
   List<DropdownMenuItem<String>> getDropDownMenuItems() {
     List<DropdownMenuItem<String>> items = List();
     for (String city in _payMethods) {
+      print("achievement: ${widget.achievement}");
+
       items.add(DropdownMenuItem(value: city, child: Text(city)));
     }
     return items;
@@ -192,16 +115,6 @@ class _MainPageState extends State<MainPage> {
   // 入力フォーム
   List<Widget> inputForm() {
     return [
-      padded(
-          child: _DateTimePicker(
-              key: Key('開始日'),
-              labelText: '開始日',
-              selectedDate: _buyDate,
-              selectDate: (DateTime date) {
-                setState(() {
-                  _buyDate = date;
-                });
-              })),
       padded(
           child: TextFormField(
         key: Key('購入品'),
