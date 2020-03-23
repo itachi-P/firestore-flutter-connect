@@ -15,8 +15,8 @@ class GoalSetting extends StatefulWidget {
 class _GoalSettingState extends State<GoalSetting> {
   final _formKey = GlobalKey<FormState>();
 
-  String _goal = '習慣化したい目標・変えたい習慣';
-  String _achievement;
+  String _goal; // 習慣化したい目標・変えたい習慣
+  String _achievement;  // 上記を習慣化する為の1日ごとの目標設定（良・可・不可の3段階）
   String _passing;
   String _failing;
 
@@ -76,7 +76,7 @@ class _GoalSettingState extends State<GoalSetting> {
         ),
         autocorrect: false,
         //initialValue: _goal = 'aaa',
-        validator: (value) => value.isEmpty ? '新しい習慣を入力してください' : null,
+        validator: (value) => value.isEmpty ? '習慣は必須入力です' : null,
         onSaved: (String value) => _goal = value,
         keyboardType: TextInputType.text,
       )),
@@ -109,8 +109,9 @@ class _GoalSettingState extends State<GoalSetting> {
           onPressed: () async {
             if (_formKey.currentState.validate()) {
               setState(() {
-                // TODO 4つの入力値をStateに保持
+                // 4つの入力値をStateに保持
                 _formKey.currentState.save();
+
               });
               print('目的: $_goal'
                   '\n最高目標: $_achievement \n最低目標: $_passing \n不可条件: $_failing');
