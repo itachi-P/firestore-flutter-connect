@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'user_login/src/auth.dart';
 import 'user_login/sign_in.dart';
 import 'user_login/sign_up.dart';
-import 'start_page.dart';
-import 'main_page.dart';
+import 'change_habit.dart';
 
 void main() => runApp(MyApp());
 
@@ -32,22 +31,10 @@ class RootPage extends StatefulWidget {
 }
 
 // 状態定義 ↓ (01) 認証状態と画面情報定義
-enum AuthStatus {
-  notSignedIn,
-  signedIn,
-  signUp
-}
-
-// カレントページ ↓ (01) 認証状態と画面情報定義
-enum CurrentPage {
-  mainPage,
-  goalSettingPage,
-  other
-}
+enum AuthStatus { notSignedIn, signedIn, signUp }
 
 class _RootPageState extends State<RootPage> {
   AuthStatus authStatus = AuthStatus.notSignedIn;
-  CurrentPage currentPage = CurrentPage.other;
 
   @override
   initState() {
@@ -58,7 +45,7 @@ class _RootPageState extends State<RootPage> {
     widget.auth.currentUser().then((userId) {
       setState(() {
         authStatus =
-        userId != null ? AuthStatus.signedIn : AuthStatus.notSignedIn;
+            userId != null ? AuthStatus.signedIn : AuthStatus.notSignedIn;
       });
     });
   }
@@ -67,13 +54,6 @@ class _RootPageState extends State<RootPage> {
   void _updateAuthStatus(AuthStatus status) {
     setState(() {
       authStatus = status;
-    });
-  }
-
-  // カレントページを更新 ↓ (03)Stateを更新する処理
-  void _updateCurrentPage(CurrentPage page) {
-    setState(() {
-      currentPage = page;
     });
   }
 
@@ -91,24 +71,12 @@ class _RootPageState extends State<RootPage> {
           onSignUp: () => _updateAuthStatus(AuthStatus.signUp),
         );
       case AuthStatus.signedIn:
-        switch (currentPage) {
-          case CurrentPage.mainPage:
-            print('■ メイン画面');
-            // メイン画面
-            return MainPage(
-                auth: widget.auth,
-                onSignOut: () => _updateAuthStatus(AuthStatus.notSignedIn),
-                currentPageDashboardSet: () => _updateCurrentPage(CurrentPage.goalSettingPage)
-            );
-          default:
-            print('■ Change habits');
-            // アプリ本体スタート画面
-            return GoalSetting(
-                auth: widget.auth,
-                onSignOut: () => _updateAuthStatus(AuthStatus.notSignedIn),
-                currentPageGoalSet: () => _updateCurrentPage(CurrentPage.mainPage)
-            );
-        }
+        // アプリ本体スタート画面
+        print('■ Change habits');
+        return ChangeHabit(
+          auth: widget.auth,
+          onSignOut: () => _updateAuthStatus(AuthStatus.notSignedIn),
+        );
         break;
       //case AuthStatus.signUp:
       default:
@@ -118,9 +86,7 @@ class _RootPageState extends State<RootPage> {
             title: 'Flutter Firebase SignUp',
             auth: widget.auth,
             onSignOut: () => _updateAuthStatus(AuthStatus.notSignedIn),
-            onSignIn: () => _updateAuthStatus(AuthStatus.signedIn)
-        );
+            onSignIn: () => _updateAuthStatus(AuthStatus.signedIn));
     }
   }
-
 }
