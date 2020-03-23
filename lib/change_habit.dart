@@ -20,6 +20,7 @@ class _ChangeHabitState extends State<ChangeHabit> {
   String _achievement; // 上記を習慣化する為の1日ごとの目標設定（良・可・不可の3段階）
   String _passing;
   String _failing;
+  String _selectedItem;
 
   @override
   Widget build(BuildContext context) {
@@ -60,12 +61,12 @@ class _ChangeHabitState extends State<ChangeHabit> {
             children: [
               padded(
                   child: Text(
-                    '３０日間で身に付けたい習慣を設定しましょう',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17,
-                        color: Colors.cyan),
-                  )),
+                '３０日間で身に付けたい習慣を設定しましょう',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                    color: Colors.cyan),
+              )),
               padded(
                 child: TextFormField(
                   autofocus: true,
@@ -141,39 +142,6 @@ class _ChangeHabitState extends State<ChangeHabit> {
   }
 
   SingleChildScrollView habitCalendar() {
-    List _grading = ["良", "可", "不可"];
-    String _selectedItem;
-
-    List<DropdownMenuItem<String>> getDropDownMenuItems() {
-      List<DropdownMenuItem<String>> items = List();
-      for (String city in _grading) {
-        items.add(DropdownMenuItem(value: city, child: Text(city)));
-      }
-      return items;
-    }
-
-//  // 支払方法変更処理
-//  void changedDropDownItem(String selectedItem) {
-//    setState(() {
-//      _selectedItem = selectedItem;
-//    });
-//  }
-
-//  // 入力フォーム
-//  DropdownButtonHideUnderline dropdownMenu() {
-//    return DropdownButtonHideUnderline(
-//      child: ButtonTheme(
-//        alignedDropdown: true,
-//        child: DropdownButton(
-//          key: Key('達成度'),
-//          value: _selectedItem,
-//          items: getDropDownMenuItems(),
-//          onChanged: changedDropDownItem,
-//        ),
-//      ),
-//    );
-//  }
-
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -181,17 +149,29 @@ class _ChangeHabitState extends State<ChangeHabit> {
             '３０日チャレンジ',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          Text(
-            "＜前のページで設定した習慣＞",
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                backgroundColor: Colors.orange),
+          Row(
+            children: <Widget>[
+              Text(
+                '習慣化目標：',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  backgroundColor: Colors.blue),
+              ),
+              Text(
+                _goal,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    backgroundColor: Colors.orange),
+              ),
+            ],
           ),
           Padding(
             padding: EdgeInsets.all(10.0),
           ),
           HabitCalendar(context),
+          Text("selected: $_selectedItem"),
         ],
       ),
     );
@@ -217,49 +197,72 @@ class _ChangeHabitState extends State<ChangeHabit> {
     return Container(
       width: 50.0,
       height: 50.0,
-      color: Colors.grey[400],
+      // TODO タップされたマスを一意に区別してその色を変えるように変更
+      color: _selectedItem == null ? Colors.grey[400] : Colors.red,
       child: InkWell(
-        onTap: onTapDairyRecord(context),
-        child: InputDecorator(
-          decoration: InputDecoration(
-            labelText: "labelText",
-          ),
-          baseStyle: TextStyle(),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text("valueText", style: TextStyle()),
-              Icon(Icons.arrow_drop_down,
-                  color: Theme
-                      .of(context)
-                      .brightness == Brightness.light
-                      ? Colors.grey.shade700
-                      : Colors.white70),
-            ],
-          ),
-        ),
-
-        //child: Text(index.toString()),
+        onTap: _onTapDairyRecord,
+        child: Text(index.toString()),
       ),
     );
   }
 
-  onTapDairyRecord(BuildContext context) {
+  Future<void> _onTapDairyRecord() async {
     print("onTap called.");
-    showDialog<void>(
+
+    List _grading = [_achievement, _passing, _failing];
+
+    List<DropdownMenuItem<String>> getDropDownMenuItems() {
+      List<DropdownMenuItem<String>> items = List();
+      for (String item in _grading) {
+        items.add(DropdownMenuItem(value: item, child: Text(item)));
+      }
+      return items;
+    }
+
+    // 選択アイテム変更処理
+    void changedDropDownItem(String selectedItem) {
+      setState(() {
+        _selectedItem = selectedItem;
+        print("selected:" + _selectedItem);
+      });
+    }
+
+    // ドロップダウンメニュー入力フォーム
+    DropdownButtonHideUnderline dropdownMenu() {
+      return DropdownButtonHideUnderline(
+        child: ButtonTheme(
+          alignedDropdown: true,
+          child: DropdownButton(
+            key: Key('達成度'),
+            value: _selectedItem,
+            items: getDropDownMenuItems(),
+            onChanged: changedDropDownItem,
+          ),
+        ),
+      );
+    }
+
+    return showDialog<void>(
       context: context,
-      barrierDismissible: true,
-      // false = user must tap button, true = tap outside dialog
+      // [false] user must tap button. [true] user can tap outside dialog.
+      barrierDismissible: false,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           title: Text('段階評価'),
-          content: Text('ここで３段階評価（色分け）を選択'),
+          // TODO ここをプルダウンメニュー化し、選択したvalueによって色分けする。
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                dropdownMenu(),
+              ],
+            ),
+          ),
           actions: <Widget>[
             FlatButton(
               child: Text('決定'),
               onPressed: () {
-                Navigator.of(dialogContext).pop(); // Dismiss alert dialog
+                Navigator.of(dialogContext)
+                    .pop(_selectedItem); // Dismiss alert dialog
               },
             ),
           ],
