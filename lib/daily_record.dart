@@ -25,7 +25,7 @@ class _DairyRecordState extends State<DairyRecord> {
     return Container(
       width: 50.0,
       height: 50.0,
-      // TODO タップされたマスを一意に区別してその色を変えるように変更
+      // タップされたマスを一意に区別し、選択肢によってその色を個別に変える
       key: ValueKey(widget.index.toString()),
       color: _colorSelect(),
       child: InkWell(
@@ -92,7 +92,7 @@ class _DairyRecordState extends State<DairyRecord> {
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           title: Text('段階評価'),
-          // TODO ここをプルダウンメニュー化し、選択したvalueによって色分けする。
+          // ここをプルダウンメニュー化し、選択したvalueによって色分けする。
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[

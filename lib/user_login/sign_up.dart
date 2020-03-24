@@ -10,7 +10,7 @@ class SignUp extends StatefulWidget {
   final VoidCallback onSignIn;
 
   @override
-  _SignUpState createState() => new _SignUpState();
+  _SignUpState createState() => _SignUpState();
 }
 
 enum FormType {
@@ -19,7 +19,7 @@ enum FormType {
 }
 
 class _SignUpState extends State<SignUp> {
-  static final formKey = new GlobalKey<FormState>();
+  static final formKey = GlobalKey<FormState>();
 
   String _email;
   String _password;
@@ -27,7 +27,7 @@ class _SignUpState extends State<SignUp> {
   String _photoUrl;
   String _authHint = '';
 
-  bool isValidata() {
+  bool isValidated() {
     final form = formKey.currentState;
     if (form.validate()) {
       form.save();
@@ -51,7 +51,7 @@ class _SignUpState extends State<SignUp> {
       _authHint = '';
     });
 
-    if (isValidata()) {
+    if (isValidated()) {
       // Formエラーがない場合
       try {
 
@@ -119,7 +119,7 @@ class _SignUpState extends State<SignUp> {
   }
 
   Widget hintText() {
-    return new Container(
+    return Container(
       //height: 80.0,
         padding: const EdgeInsets.all(32.0),
         child: Text(
@@ -132,24 +132,24 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        appBar: new AppBar(
-          title: new Text(widget.title),
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
         ),
         backgroundColor: Colors.grey[300],
-        body: new SingleChildScrollView(child: new Container(
+        body: SingleChildScrollView(child: Container(
             padding: const EdgeInsets.all(16.0),
-            child: new Column(
+            child: Column(
                 children: [
-                  new Card(
-                      child: new Column(
+                  Card(
+                      child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            new Container(
+                            Container(
                                 padding: const EdgeInsets.all(16.0),
-                                child: new Form(
+                                child: Form(
                                     key: formKey,
-                                    child: new Column(
+                                    child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.stretch,
                                       children: usernameAndPassword() + submitWidgets(),
                                     )
@@ -165,7 +165,7 @@ class _SignUpState extends State<SignUp> {
   }
 
   Widget padded({Widget child}) {
-    return new Padding(
+    return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.0),
       child: child,
     );
