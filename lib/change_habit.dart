@@ -172,6 +172,7 @@ class _ChangeHabitState extends State<ChangeHabit> {
           Padding(
             padding: EdgeInsets.all(10.0),
           ),
+
           HabitCalendar(),
         ],
       ),
