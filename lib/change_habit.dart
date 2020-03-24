@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'user_login/src/auth.dart';
 //import 'habit_calendar.dart';
 //import 'goal_setting.dart';
+import 'daily_record.dart';
 
 class ChangeHabit extends StatefulWidget {
   ChangeHabit({Key key, this.auth, this.onSignOut}) : super(key: key);
@@ -20,7 +21,7 @@ class _ChangeHabitState extends State<ChangeHabit> {
   String _achievement; // 上記を習慣化する為の1日ごとの目標設定（良・可・不可の3段階）
   String _passing;
   String _failing;
-  String _selectedItem;
+  List _grading;
 
   @override
   Widget build(BuildContext context) {
@@ -115,10 +116,11 @@ class _ChangeHabitState extends State<ChangeHabit> {
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {
                       setState(() {
-                        // 4つの入力値をStateに保持
+                        // 4つの入力値をStateに保持->(3/24)引数として渡すことにしたから不要か？
                         _formKey.currentState.save();
                         // 30日カレンダー画面に切り替え
                         _goalSet = true;
+                        _grading = [_achievement, _passing, _failing];
                       });
                       print('目的: $_goal'
                           '\n最高目標: $_achievement \n最低目標: $_passing \n不可条件: $_failing');
@@ -170,14 +172,13 @@ class _ChangeHabitState extends State<ChangeHabit> {
           Padding(
             padding: EdgeInsets.all(10.0),
           ),
-          HabitCalendar(context),
-          Text("selected: $_selectedItem"),
+          HabitCalendar(),
         ],
       ),
     );
   }
 
-  Widget HabitCalendar(BuildContext context) {
+  Widget HabitCalendar() {
     int index = 0;
     return Container(
       alignment: Alignment.center,
@@ -188,86 +189,85 @@ class _ChangeHabitState extends State<ChangeHabit> {
           spacing: 5.0,
           runSpacing: 20.0,
           children: <Widget>[
-            for (index = 1; index < 31; index++) DairyRecord(context, index)
+            for (index = 1; index < 31; index++) DairyRecord(index: index, grading: _grading)
           ]),
     );
   }
 
-  Widget DairyRecord(BuildContext context, int index) {
-    return Container(
-      width: 50.0,
-      height: 50.0,
-      // TODO タップされたマスを一意に区別してその色を変えるように変更
-      color: _selectedItem == null ? Colors.grey[400] : Colors.red,
-      child: InkWell(
-        onTap: _onTapDairyRecord,
-        child: Text(index.toString()),
-      ),
-    );
-  }
-
-  Future<void> _onTapDairyRecord() async {
-    print("onTap called.");
-
-    List _grading = [_achievement, _passing, _failing];
-
-    List<DropdownMenuItem<String>> getDropDownMenuItems() {
-      List<DropdownMenuItem<String>> items = List();
-      for (String item in _grading) {
-        items.add(DropdownMenuItem(value: item, child: Text(item)));
-      }
-      return items;
-    }
-
-    // 選択アイテム変更処理
-    void changedDropDownItem(String selectedItem) {
-      setState(() {
-        _selectedItem = selectedItem;
-        print("selected:" + _selectedItem);
-      });
-    }
-
-    // ドロップダウンメニュー入力フォーム
-    DropdownButtonHideUnderline dropdownMenu() {
-      return DropdownButtonHideUnderline(
-        child: ButtonTheme(
-          alignedDropdown: true,
-          child: DropdownButton(
-            key: Key('達成度'),
-            value: _selectedItem,
-            items: getDropDownMenuItems(),
-            onChanged: changedDropDownItem,
-          ),
-        ),
-      );
-    }
-
-    return showDialog<void>(
-      context: context,
-      // [false] user must tap button. [true] user can tap outside dialog.
-      barrierDismissible: false,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: Text('段階評価'),
-          // TODO ここをプルダウンメニュー化し、選択したvalueによって色分けする。
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                dropdownMenu(),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('決定'),
-              onPressed: () {
-                Navigator.of(dialogContext)
-                    .pop(_selectedItem); // Dismiss alert dialog
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+//  Widget DairyRecord(int index) {
+//    return Container(
+//      width: 50.0,
+//      height: 50.0,
+//      // TODO タップされたマスを一意に区別してその色を変えるように変更
+//      key: ValueKey(index.toString()),
+//      color: _selectedItem == null ? Colors.grey[400] : Colors.red,
+//      child: InkWell(
+//        onTap: _onTapDairyRecord,
+//        child: Text(index.toString()),
+//      ),
+//    );
+//  }
+//
+//  Future<void> _onTapDairyRecord() async {
+//    print("onTap called.");
+//
+//    List<DropdownMenuItem<String>> getDropDownMenuItems() {
+//      List<DropdownMenuItem<String>> items = List();
+//      for (String item in _grading) {
+//        items.add(DropdownMenuItem(value: item, child: Text(item)));
+//      }
+//      return items;
+//    }
+//
+//    // 選択アイテム変更処理
+//    void changedDropDownItem(String selectedItem) {
+//      setState(() {
+//        _selectedItem = selectedItem;
+//        print("selected:" + _selectedItem);
+//      });
+//    }
+//
+//    // ドロップダウンメニュー入力フォーム
+//    DropdownButtonHideUnderline dropdownMenu() {
+//      return DropdownButtonHideUnderline(
+//        child: ButtonTheme(
+//          alignedDropdown: true,
+//          child: DropdownButton(
+//            key: Key('達成度'),
+//            value: _selectedItem,
+//            items: getDropDownMenuItems(),
+//            onChanged: changedDropDownItem,
+//          ),
+//        ),
+//      );
+//    }
+//
+//    return showDialog<void>(
+//      context: context,
+//      // [false] user must tap button. [true] user can tap outside dialog.
+//      barrierDismissible: false,
+//      builder: (BuildContext dialogContext) {
+//        return AlertDialog(
+//          title: Text('段階評価'),
+//          // TODO ここをプルダウンメニュー化し、選択したvalueによって色分けする。
+//          content: SingleChildScrollView(
+//            child: ListBody(
+//              children: <Widget>[
+//                dropdownMenu(),
+//              ],
+//            ),
+//          ),
+//          actions: <Widget>[
+//            FlatButton(
+//              child: Text('決定'),
+//              onPressed: () {
+//                Navigator.of(dialogContext)
+//                    .pop(_selectedItem); // Dismiss alert dialog
+//              },
+//            ),
+//          ],
+//        );
+//      },
+//    );
+//  }
 }
