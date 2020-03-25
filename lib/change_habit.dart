@@ -4,6 +4,8 @@ import 'user_login/src/auth.dart';
 //import 'goal_setting.dart';
 import 'daily_record.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ChangeHabit extends StatefulWidget {
   ChangeHabit({Key key, this.auth, this.onSignOut}) : super(key: key);
   final BaseAuth auth;
@@ -156,9 +158,9 @@ class _ChangeHabitState extends State<ChangeHabit> {
               Text(
                 '習慣化目標：',
                 style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  backgroundColor: Colors.blue),
+                    color: Colors.white,
+                    fontSize: 18,
+                    backgroundColor: Colors.blue),
               ),
               Text(
                 _goal,
@@ -173,9 +175,27 @@ class _ChangeHabitState extends State<ChangeHabit> {
             padding: EdgeInsets.all(10.0),
           ),
           HabitCalendar(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              RaisedButton(
+                onPressed: _readFirestore(context),
+                child: Text("読み込み"),
+              ),
+              RaisedButton(
+                onPressed: () {},
+                child: Text("書き込み"),
+              ),
+            ],
+          ),
         ],
       ),
     );
+  }
+
+  // 通るが、ボタンが押下不能な状態になるのでコールバック関数が未だに理解できていない模様
+  _readFirestore(BuildContext context) {
+      print(Firestore.instance.collection('change-habit').snapshots().map((data) => data.toString()));
   }
 
   Widget HabitCalendar() {
@@ -189,7 +209,8 @@ class _ChangeHabitState extends State<ChangeHabit> {
           spacing: 5.0,
           runSpacing: 20.0,
           children: <Widget>[
-            for (index = 1; index < 31; index++) DairyRecord(index: index, grading: _grading)
+            for (index = 1; index < 31; index++)
+              DairyRecord(index: index, grading: _grading)
           ]),
     );
   }
