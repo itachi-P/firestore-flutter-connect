@@ -18,12 +18,12 @@ class ChangeHabit extends StatefulWidget {
 class _ChangeHabitState extends State<ChangeHabit> {
   final _formKey = GlobalKey<FormState>();
 
-  bool _goalSet = false;
-  String _goal; // 習慣化したい目標・変えたい習慣
+  bool _isGoalSet = false;
+  String _settingGoal; // 習慣化したい目標・変えたい習慣
   String _achievement; // 上記を習慣化する為の1日ごとの目標設定（良・可・不可の3段階）
   String _passing;
-  String _failing;
-  List _grading;
+  String _failure;
+  List _grading;  // 上記三段階評価の文字列を纏めたリスト
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class _ChangeHabitState extends State<ChangeHabit> {
             ),
           ],
         ),
-        body: _goalSet ? habitCalendar() : goalSetting());
+        body: _isGoalSet ? habitCalendar() : goalSetting());
   }
 
   // 目標設定フォーム
@@ -80,9 +80,9 @@ class _ChangeHabitState extends State<ChangeHabit> {
                     border: OutlineInputBorder(),
                   ),
                   autocorrect: false,
-                  //initialValue: _goal = 'aaa',
+                  //initialValue: _settingGoal = 'aaa',
                   validator: (value) => value.isEmpty ? '習慣は必須入力です' : null,
-                  onSaved: (String value) => _goal = value,
+                  onSaved: (String value) => _settingGoal = value,
                   keyboardType: TextInputType.text,
                 ),
               ),
@@ -110,7 +110,7 @@ class _ChangeHabitState extends State<ChangeHabit> {
                   decoration: InputDecoration(labelText: '不可条件'),
                   autocorrect: false,
                   validator: (value) => value.isEmpty ? '不可条件を指定してください' : null,
-                  onSaved: (value) => _failing = value,
+                  onSaved: (value) => _failure = value,
                 ),
               ),
               padded(
@@ -121,11 +121,11 @@ class _ChangeHabitState extends State<ChangeHabit> {
                         // 4つの入力値をStateに保持->(3/24)引数として渡すことにしたから不要か？
                         _formKey.currentState.save();
                         // 30日カレンダー画面に切り替え
-                        _goalSet = true;
-                        _grading = [_achievement, _passing, _failing];
+                        _isGoalSet = true;
+                        _grading = [_achievement, _passing, _failure];
                       });
-                      print('目的: $_goal'
-                          '\n最高目標: $_achievement \n最低目標: $_passing \n不可条件: $_failing');
+                      print('目的: $_settingGoal'
+                          '\n最高目標: $_achievement \n最低目標: $_passing \n不可条件: $_failure');
                     }
                   },
                   child: Text('登録する'),
@@ -163,7 +163,7 @@ class _ChangeHabitState extends State<ChangeHabit> {
                     backgroundColor: Colors.blue),
               ),
               Text(
-                _goal,
+                _settingGoal,
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
