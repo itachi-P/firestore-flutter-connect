@@ -31,6 +31,7 @@ class _ChangeHabitState extends State<ChangeHabit> {
       try {
         await widget.auth.signOut();
         widget.onSignOut();
+        print('■ ログアウトしたよ。');
       } catch (e) {
         print(e);
       }

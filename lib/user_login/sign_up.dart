@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fireflutter/user_login/src/auth.dart';
 import 'package:fireflutter/user_login/primary_button.dart';
@@ -23,9 +24,10 @@ class _SignUpState extends State<SignUp> {
 
   String _email;
   String _password;
-  String _displayName;
-  String _photoUrl;
+  String _displayName = '';
+  String _photoUrl = '';
   String _authHint = '';
+  String _userId;
 
   bool isValidated() {
     final form = formKey.currentState;
@@ -40,6 +42,7 @@ class _SignUpState extends State<SignUp> {
 
     setState(() {
       _authHint = '';
+      _userId = '';
     });
     widget.onSignOut();
   }
@@ -49,6 +52,7 @@ class _SignUpState extends State<SignUp> {
 
     setState(() {
       _authHint = '';
+      _userId = '';
     });
 
     if (isValidated()) {
@@ -60,6 +64,8 @@ class _SignUpState extends State<SignUp> {
 
         setState(() {
           _authHint = 'Signed In\n\nUser id: $userId';
+          print("userID: $userId");
+          _userId = userId;
         });
         widget.onSignIn();
       }
