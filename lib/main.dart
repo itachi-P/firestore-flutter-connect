@@ -82,17 +82,19 @@ class _RootPageState extends State<RootPage> {
         print('■ Change habits');
         // ログイン状態であればまずCloudFirestoreにデータが有るかを見に行く
         setState(() {
-          //
-
+          widget.auth.currentUser().then((value) async {
+            _userId = await value;
+          });
         });
-        //FirebaseAuth.instance.currentUser().then((userId) => _userId);
-        FirebaseUser user;
-        widget.auth.currentUser().then((value) => user);
-        print("_userId: $user");
         widget.userRef.document(_userId).snapshots().listen((snapshot) {
           if (snapshot != null) {
             print("_userId: $_userId");
             print("snapshot: ${snapshot.data}");
+            widget.userRef.document(_userId).collection('set-goal_001').document('targets').snapshots().listen((snapshot) {
+              if (snapshot != null) {
+                print(snapshot.data);
+            }
+            });
           } else {
             print("No data!");
             widget.userRef.document(_userId).setData(
