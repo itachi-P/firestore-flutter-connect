@@ -80,7 +80,7 @@ class _RootPageState extends State<RootPage> {
       case AuthStatus.signedIn:
         // アプリ本体スタート画面
         print('■ Change habits');
-        // ログイン状態であればまずFirestoreにデータが有るかを見に行く
+        // ログイン状態であればまずCloudFirestoreにデータが有るかを見に行く
         setState(() {
           //
 
