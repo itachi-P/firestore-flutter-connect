@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class BaseAuth {
   Future<String> signIn(String email, String password);
@@ -31,11 +32,15 @@ class Auth implements BaseAuth {
     FirebaseUser user = _result.user;
 
     // Firebase UserInfo 更新　↓ (04) AuthenticationのuserInfo更新処理
-    UserUpdateInfo info = UserUpdateInfo();
-    info.displayName = displayName; // 表示名
-    info.photoUrl = photoUrl; // 画像URL
-    user.updateProfile(info);
+//    UserUpdateInfo info = UserUpdateInfo();
+//    info.displayName = displayName; // 表示名
+//    info.photoUrl = photoUrl; // 画像URL
+//    user.updateProfile(info);
 
+    Firestore.instance.collection('change-habit').document(user.uid).setData({
+      'display-name': displayName,
+      'createDay': DateTime.now(),
+    });
     return user.uid;
   }
 

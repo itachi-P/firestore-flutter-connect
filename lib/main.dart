@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'user_login/src/auth.dart';
@@ -40,6 +40,7 @@ enum AuthStatus { notSignedIn, signedIn, signUp }
 class _RootPageState extends State<RootPage> {
   AuthStatus authStatus = AuthStatus.notSignedIn;
   String _userId;
+  String _displayName;
 
   @override
   initState() {
@@ -52,7 +53,7 @@ class _RootPageState extends State<RootPage> {
       print("userId in initState(): $userId");
       setState(() {
         authStatus =
-        userId != null ? AuthStatus.signedIn : AuthStatus.notSignedIn;
+            userId != null ? AuthStatus.signedIn : AuthStatus.notSignedIn;
       });
     });
   }
@@ -86,28 +87,33 @@ class _RootPageState extends State<RootPage> {
             _userId = await value;
           });
         });
+
         widget.userRef.document(_userId).snapshots().listen((snapshot) {
-          if (snapshot != null) {
+          if (snapshot.exists) {
             print("_userId: $_userId");
             print("snapshot: ${snapshot.data}");
-            widget.userRef.document(_userId).collection('set-goal_001').document('targets').snapshots().listen((snapshot) {
-              if (snapshot != null) {
+            _displayName = snapshot.data['display-name'] ?? null;
+            print("display-name: $_displayName");
+            widget.userRef
+                .document(_userId)
+                .collection('set-goal_001')
+                .document('30days-record')
+                .snapshots()
+                .listen((snapshot) {
+              if (snapshot.exists) {
                 print(snapshot.data);
-            }
+              }
             });
           } else {
             print("No data!");
-            widget.userRef.document(_userId).setData(
-                {
-                  'name': 'new user',
-                  'createDay': DateTime.now(),
-                }
-            );
           };
         });
         return ChangeHabit(
           auth: widget.auth,
           onSignOut: () => _updateAuthStatus(AuthStatus.notSignedIn),
+          userId: _userId,
+          displayName: _displayName,
+          // snapshots: snapshot.data,
         );
         break;
       //case AuthStatus.signUp:

@@ -7,9 +7,11 @@ import 'daily_record.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChangeHabit extends StatefulWidget {
-  ChangeHabit({Key key, this.auth, this.onSignOut}) : super(key: key);
+  ChangeHabit({Key key, this.auth, this.onSignOut, this.userId, this.displayName}) : super(key: key);
   final BaseAuth auth;
   final VoidCallback onSignOut;
+  final String userId;
+  final String displayName;
 
   @override
   _ChangeHabitState createState() => _ChangeHabitState();
@@ -39,13 +41,19 @@ class _ChangeHabitState extends State<ChangeHabit> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('Change Habits'),
+          title: Text(
+            '${widget.displayName}さん',
+            style: TextStyle(
+              color: Colors.yellow,
+              fontSize: 18.0,
+            ),
+          ),
           actions: <Widget>[
             FlatButton(
               onPressed: _signOut,
               child: Text(
-                'サインアウト',
-                style: TextStyle(fontSize: 17.0, color: Colors.white),
+                'ログアウト',
+                style: TextStyle(fontSize: 16.0, color: Colors.white),
               ),
             ),
           ],
