@@ -132,6 +132,13 @@ class _ChangeHabitState extends State<ChangeHabit> {
                         // 30日カレンダー画面に切り替え
                         _isGoalSet = true;
                         _grading = [_achievement, _passing, _failure];
+                        Firestore.instance.collection('change-habit').document(widget.userId).collection('set-goal_001').document('targets').setData({
+                          'setting-goal': _settingGoal,
+                          'achievement': _achievement,
+                          'passing': _passing,
+                          'failure': _failure,
+                          'create-day': DateTime.now().toIso8601String(),
+                        });
                       });
                       print('目的: $_settingGoal'
                           '\n最高目標: $_achievement \n最低目標: $_passing \n不可条件: $_failure');
@@ -189,9 +196,9 @@ class _ChangeHabitState extends State<ChangeHabit> {
             children: <Widget>[
               RaisedButton(
                 onPressed: () {
-                  Stream<List> streamlist = _buildList(context);
-                  Future<List> list = streamlist.first;
-                  list.then((value) => print(value.first.document_id));
+                  Stream<List> streamList = _buildList(context);
+                  Future<List> list = streamList.first;
+                  list.then((value) => print("value: ${value.first.document_id}"));
                 },
                 child: Text("読み込み"),
               ),
@@ -206,7 +213,6 @@ class _ChangeHabitState extends State<ChangeHabit> {
     );
   }
 
-  // 通るが、ボタンが押下不能な状態になるのでコールバック関数が未だに理解できていない模様
   _buildList(BuildContext context) {
     return Firestore.instance.collection('change-habit').snapshots().map((data) =>
         data.documents.map((data) => _buildListItem(context, data)).toList());
@@ -219,6 +225,11 @@ class _ChangeHabitState extends State<ChangeHabit> {
 
   Widget HabitCalendar() {
     int index = 0;
+    Firestore.instance.collection('change-habit').document(widget.userId).collection('set-goal_001').document('30days-record').snapshots().listen((snapshot) async {
+      if(snapshot.exists) {
+        await print("snapshot2: ${snapshot.data}");
+      }
+    });
     return Container(
       alignment: Alignment.center,
       color: Colors.grey[300],

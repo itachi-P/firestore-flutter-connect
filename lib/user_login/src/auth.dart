@@ -39,7 +39,7 @@ class Auth implements BaseAuth {
 
     Firestore.instance.collection('change-habit').document(user.uid).setData({
       'display-name': displayName,
-      'createDay': DateTime.now(),
+      'createDay': DateTime.now().toUtc(),
     });
     return user.uid;
   }

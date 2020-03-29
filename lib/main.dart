@@ -85,30 +85,32 @@ class _RootPageState extends State<RootPage> {
         setState(() {
           widget.auth.currentUser().then((value) async {
             _userId = await value;
+            widget.userRef.document(_userId).snapshots().listen((snapshot) {
+              if (snapshot.exists) {
+                print("_userId: $_userId");
+                print("ユーザープロファイル: ${snapshot.data}");
+                _displayName = snapshot.data['display-name'] ?? null;
+                print("display-name: $_displayName");
+                // TODO 以下はテスト表示、後で消す。
+                widget.userRef
+                    .document(_userId)
+                    .collection('set-goal_001')
+                    .document('30days-record')
+                    .snapshots()
+                    .listen((snapshot) {
+                  if (snapshot.exists) {
+                    print("snapshot: ${snapshot.data}");
+                  }
+                });
+              } else {
+                print("No data!");
+              };
+            });
           });
         });
 
-        widget.userRef.document(_userId).snapshots().listen((snapshot) {
-          if (snapshot.exists) {
-            print("_userId: $_userId");
-            print("snapshot: ${snapshot.data}");
-            _displayName = snapshot.data['display-name'] ?? null;
-            print("display-name: $_displayName");
-            widget.userRef
-                .document(_userId)
-                .collection('set-goal_001')
-                .document('30days-record')
-                .snapshots()
-                .listen((snapshot) {
-              if (snapshot.exists) {
-                print(snapshot.data);
-              }
-            });
-          } else {
-            print("No data!");
-          };
-        });
-        return ChangeHabit(
+        print("check1: $_userId, $_displayName");
+        return ChangeHabit (
           auth: widget.auth,
           onSignOut: () => _updateAuthStatus(AuthStatus.notSignedIn),
           userId: _userId,
